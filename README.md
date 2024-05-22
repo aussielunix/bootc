@@ -3,7 +3,9 @@
 Experimenting with bootc for a cloud native workflow of my Linux fleet.
 
 Ideas I am interested in:
+
 * Can I use a Containerfile (Dockerfile) as the source of truth for all image types - containers, local VMs, laptop installs, AWS ami's etc ?
+* No more Packer ?
 * cloud native development workflow and tooling for managing a fleet of Linux machines (bare metal, VMs or containers)
 * Air gapped updates
 * Over the air updates
