@@ -31,7 +31,7 @@ sudo podman run --rm -it --privileged --pull=newer  --security-opt label=type:un
 ```bash
 sudo skopeo copy containers-storage:localhost/bootc-user:test  dir://run/media/lunix/1f5f80f1-07f5-4257-b463-8be038de7ed1/updates`
 ```
-* on Linux device mount USB and upgrade using OCI artifacts as the source
+* on air-gapped Linux device mount USB and upgrade using OCI artifacts as the source
 ```bash
 mount /dev/sda1 /mnt/
 bootc switch --transport dir /mnt/updates
