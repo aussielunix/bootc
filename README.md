@@ -44,6 +44,7 @@ If that fails you can `bootc rollback` to previous OCI container version.
 ## Links
 
 [Issue](https://gitlab.com/Siosm/bootc-base-images-experimental/-/tree/fedora-kinoite) tracking the overal readiness of bootc for Atomic Desktops
+* https://gitlab.com/Siosm/bootc-base-images-experimental/-/tree/fedora-kinoite
 * https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/using_image_mode_for_rhel_to_build_deploy_and_manage_operating_systems/managing-rhel-bootable-images_using-image-mode-for-rhel-to-build-deploy-and-manage-operating-systems#switching-the-container-image-reference_managing-rhel-bootable-images
 * https://github.com/osbuild/bootc-image-builder/tree/main
 * https://osbuild.org/docs/bootc/
