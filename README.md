@@ -21,7 +21,7 @@ sudo podman build --build-arg "sshpubkey=$(cat /home/myuser/.ssh/id_rsa.pub)" -t
 
 * build new installer-iso from baked container image
 ```bash
-sudo podman run --rm -it --privileged --pull=newer  --security-opt label=type:unconfined_t -v $(pwd)/output:/output -v /var/lib/containers/storage:/var/lib/containers/storage quay.io/centos-bootc/bootc-image-builder:latest --type iso --target-arch amd64 --local localhost/bootc-user:test
+sudo podman run --rm -it --privileged --pull=newer  --security-opt label=type:unconfined_t -v $(pwd)/output:/output -v /var/lib/containers/storage:/var/lib/containers/storage -v $(pwd)/config.toml:/config.toml quay.io/centos-bootc/bootc-image-builder:latest --rootfs ext4 --type iso --target-arch amd64 --local localhost/bootc-user:test
 ```
 
 ## Air gapped updates
@@ -43,6 +43,7 @@ If that fails you can `bootc rollback` to previous OCI container version.
 
 ## Links
 
+[Issue](https://gitlab.com/Siosm/bootc-base-images-experimental/-/tree/fedora-kinoite) tracking the overal readiness of bootc for Atomic Desktops
 * https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/using_image_mode_for_rhel_to_build_deploy_and_manage_operating_systems/managing-rhel-bootable-images_using-image-mode-for-rhel-to-build-deploy-and-manage-operating-systems#switching-the-container-image-reference_managing-rhel-bootable-images
 * https://github.com/osbuild/bootc-image-builder/tree/main
 * https://osbuild.org/docs/bootc/
