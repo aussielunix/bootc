@@ -11,6 +11,7 @@ Ideas I am interested in:
 * Over the air updates
 * easy Roll backs
 * supply chain security
+* Can I get a bootc equipped LiveCD, boot any new baremetal/VM and the use `bootc` to switch the system over to it's purpose built bootable container and install to local disk ?
 
 ## Notes
 

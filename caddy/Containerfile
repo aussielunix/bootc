@@ -18,3 +18,4 @@ RUN dnf -y install 'dnf-command(copr)' \
   && systemctl enable qemu-guest-agent \
   && systemctl disable rpcbind.socket \
   && systemctl disable rpcbind.service
+COPY wheel-nopasswd /etc/sudoers.d
