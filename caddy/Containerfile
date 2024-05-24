@@ -6,9 +6,9 @@ FROM quay.io/centos-bootc/centos-bootc:stream9
 RUN dnf -y install 'dnf-command(copr)' \
   && dnf -y copr enable @caddy/caddy \
   && dnf -y install \
-    mc \
-    cloud-init \
     caddy \
+    cloud-init \
+    mc \
     qemu-guest-agent \
     vim \
   && dnf clean all \
@@ -17,5 +17,7 @@ RUN dnf -y install 'dnf-command(copr)' \
   && systemctl enable caddy \
   && systemctl enable qemu-guest-agent \
   && systemctl disable rpcbind.socket \
-  && systemctl disable rpcbind.service
+  && systemctl disable rpcbind.service \
+  && systemctl enable bootc-fetch-apply-updates.timer
 COPY wheel-nopasswd /etc/sudoers.d
+COPY website/ /usr/share/caddy/
