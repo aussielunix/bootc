@@ -3,8 +3,7 @@ FROM quay.io/centos-bootc/centos-bootc:stream9
 # https://github.com/osbuild/bootc-image-builder/issues/421
 # FIXED upstream https://github.com/osbuild/images/pull/696
 
-RUN dnf -y upgrade \
-  && dnf -y install 'dnf-command(copr)' \
+RUN dnf -y install 'dnf-command(copr)' \
   && dnf -y copr enable @caddy/caddy \
   && dnf -y install \
     caddy \
