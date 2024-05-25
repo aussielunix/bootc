@@ -1,0 +1,5 @@
+[[customizations.user]]
+name = "ubuntu"
+password = "mynewpassword"
+key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAA...MXmcu/kX5Q/gUky1lfROyc2xAVqwrXBWmi3iQ5ZQ== John Doe <john@example.com>"
+groups = ["wheel"]
