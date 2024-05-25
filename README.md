@@ -1,10 +1,10 @@
 # bootc
 
-Experimenting with bootc for a cloud native workflow of my Linux fleet.
+Experimenting with bootc for managing my Linux fleet with a cloud native workflow.
 
 Ideas I am interested in:
 
-* Can I use a Containerfile (Dockerfile) as the source of truth for all image types - containers, local VMs, laptop installs, AWS ami's etc ?
+* Can I use a Containerfile (Dockerfile) as the source of truth for all image types - containers, local VMs, bare metal, AWS ami's etc ?
 * No more Packer ?
 * cloud native development workflow and tooling for managing a fleet of Linux machines (bare metal, VMs or containers)
 * Air gapped updates
@@ -13,34 +13,46 @@ Ideas I am interested in:
 * supply chain security
 * Can I get a bootc equipped LiveCD, boot any new baremetal/VM and the use `bootc` to switch the system over to it's purpose built bootable container and install to local disk ?
 
-## Notes
+## Demo 1
 
-* build new container image
+* Create bootable media from `docker.io/aussielunix/bootc-base:latest`
 ```bash
-sudo podman build --build-arg "sshpubkey=$(cat /home/myuser/.ssh/id_rsa.pub)" -t localhost/bootc-user:test .
+sudo podman run --rm -it --privileged --pull=newer  --security-opt label=type:unconfined_t -v $(pwd)/output:/output -v /var/lib/containers/storage:/var/lib/containers/storage quay.io/centos-bootc/bootc-image-builder:latest --rootfs ext4 --type iso --target-arch amd64 docker.io/aussielunix/bootc-base:latest
+sudo dd status=progress if=output/bootiso/install.iso of=/dev/sda
 ```
+* Boot metal or VM
+  Note: This is cloud-init enabled so be sure to create a username etc but refrain from adding workloads via cloud-init
+* ssh to host and switch to track new workload container image - Caddy and a basic website
+  ```bash
+  bootc switch docker.io/aussielunix/bootc-caddy:latest
+  systemctl reboot
+  ```
+* test new workload - curl / browse to website
 
-* build new installer-iso from baked container image
-```bash
-sudo podman run --rm -it --privileged --pull=newer  --security-opt label=type:unconfined_t -v $(pwd)/output:/output -v /var/lib/containers/storage:/var/lib/containers/storage -v $(pwd)/config.toml:/config.toml quay.io/centos-bootc/bootc-image-builder:latest --rootfs ext4 --type iso --target-arch amd64 --local localhost/bootc-user:test
-```
+## Demo 2
 
-## Air gapped updates
+* bake updated workload container
+* ssh to host and initiate update
+* reboot
+* test update workload - curl / browse to website
 
-* mount usb drive
-* copy OCI artifacts over
-```bash
-sudo skopeo copy containers-storage:localhost/bootc-user:test  dir://run/media/lunix/1f5f80f1-07f5-4257-b463-8be038de7ed1/updates`
-```
-* on air-gapped Linux device mount USB and upgrade using OCI artifacts as the source
-```bash
-mount /dev/sda1 /mnt/
-bootc switch --transport dir /mnt/updates
-bootc upgrade --apply
-```
-:TODO: encrypt and sign OCI artifact on USB
+## Demo 3
 
-If that fails you can `bootc rollback` to previous OCI container version.
+* air gapped bare metal install
+* air gapped bare metal upgrade
+* test
+
+## Demo 4
+
+* supply chain security
+
+## Demo 5
+
+* create ami
+* create ec2 instance from base image
+* ssh in and switch to workload container image
+* reboot
+* test
 
 ## Links
 
@@ -50,11 +62,12 @@ If that fails you can `bootc rollback` to previous OCI container version.
 * https://github.com/osbuild/bootc-image-builder/tree/main
 * https://osbuild.org/docs/bootc/
 * https://gitlab.com/fedora/bootc/examples/-/tree/main?ref_type=heads
+* https://gitlab.com/redhat/centos-stream/containers/bootc/-/tree/main?ref_type=heads
 * https://github.com/containers/podman-bootc
+* https://github.com/containers/bootc
 * https://docs.fedoraproject.org/en-US/bootc/podman-bootc-cli/
 * https://docs.fedoraproject.org/en-US/bootc/auto-updates/
 * https://centos.github.io/centos-bootc/usage/
-* https://github.com/CentOS/centos-bootc
 * https://containers.github.io/bootable/what-needs-work.html
 * https://github.com/ublue-os/main-bootc
 * https://github.com/rsturla/fedora-bootc-base
