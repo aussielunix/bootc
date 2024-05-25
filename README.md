@@ -56,18 +56,23 @@ sudo dd status=progress if=output/bootiso/install.iso of=/dev/sda
 
 ## Links
 
-[Issue](https://gitlab.com/Siosm/bootc-base-images-experimental/-/tree/fedora-kinoite) tracking the overal readiness of bootc for Atomic Desktops
-* https://gitlab.com/Siosm/bootc-base-images-experimental/-/tree/fedora-kinoite
+**SERVERS**
+
 * https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/using_image_mode_for_rhel_to_build_deploy_and_manage_operating_systems/managing-rhel-bootable-images_using-image-mode-for-rhel-to-build-deploy-and-manage-operating-systems#switching-the-container-image-reference_managing-rhel-bootable-images
-* https://github.com/osbuild/bootc-image-builder/tree/main
 * https://osbuild.org/docs/bootc/
-* https://gitlab.com/fedora/bootc/examples/-/tree/main?ref_type=heads
-* https://gitlab.com/redhat/centos-stream/containers/bootc/-/tree/main?ref_type=heads
-* https://github.com/containers/podman-bootc
 * https://github.com/containers/bootc
-* https://docs.fedoraproject.org/en-US/bootc/podman-bootc-cli/
 * https://docs.fedoraproject.org/en-US/bootc/auto-updates/
-* https://centos.github.io/centos-bootc/usage/
 * https://containers.github.io/bootable/what-needs-work.html
-* https://github.com/ublue-os/main-bootc
+* https://github.com/osbuild/bootc-image-builder/tree/main
+* https://gitlab.com/redhat/centos-stream/containers/bootc/-/tree/main?ref_type=heads
+* https://docs.fedoraproject.org/en-US/bootc/podman-bootc-cli/
+* https://centos.github.io/centos-bootc/usage/
+* https://github.com/containers/podman-bootc
+* https://gitlab.com/fedora/bootc/examples/-/tree/main?ref_type=heads
+
+**WORKSTATIONS**
+
+* [Issue](https://gitlab.com/Siosm/bootc-base-images-experimental/-/tree/fedora-kinoite) tracking the overal readiness of bootc for Atomic Desktops
 * https://github.com/rsturla/fedora-bootc-base
+* https://github.com/ublue-os/main-bootc
+* https://gitlab.com/Siosm/bootc-base-images-experimental/-/tree/fedora-kinoite
