@@ -24,8 +24,8 @@ sudo dd status=progress if=output/bootiso/install.iso of=/dev/sda
   Note: This is cloud-init enabled so be sure to create a username etc but refrain from adding workloads via cloud-init
 * ssh to host and switch to track new workload container image - Caddy and a basic website
   ```bash
-  bootc switch docker.io/aussielunix/bootc-caddy:latest
-  systemctl reboot
+  sudo bootc switch docker.io/aussielunix/bootc-caddy:latest
+  sudo systemctl reboot
   ```
 * test new workload - curl / browse to website
 
