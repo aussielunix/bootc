@@ -20,7 +20,7 @@ Ideas I am interested in:
 sudo podman run --rm -it --privileged --pull=newer  --security-opt label=type:unconfined_t -v $(pwd)/output:/output -v /var/lib/containers/storage:/var/lib/containers/storage quay.io/centos-bootc/bootc-image-builder:latest --rootfs ext4 --type iso --target-arch amd64 docker.io/aussielunix/bootc-base:latest
 sudo dd status=progress if=output/bootiso/install.iso of=/dev/sda
 ```
-* Boot metal or VM
+* Boot metal or VM  
   Note: This is cloud-init enabled so be sure to create a username etc but refrain from adding workloads via cloud-init
 * ssh to host and switch to track new workload container image - Caddy and a basic website
   ```bash
