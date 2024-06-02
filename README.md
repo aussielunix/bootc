@@ -66,13 +66,13 @@ Available recipes:
     create_template id name description image_name image_ver
     upload_image name version
 ```
-* build new base OCI artifact
+* build new base OCI artifact  
   `just build base`
-* build new base qcow2 image
+* build new base qcow2 image  
   `just build-qcow2 base`
-* upload base qcow2 image to Proxmox host
+* upload base qcow2 image to Proxmox host  
   `just upload_image base 0.1`
-* create new VM template
+* create new VM template  
   `just create_template 7000 base-01 "Built by bootc" base 0.1`
 
 ## Links
