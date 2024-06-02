@@ -1,18 +1,13 @@
-FROM quay.io/centos-bootc/centos-bootc:stream9
-#FROM quay.io/fedora/fedora-bootc:40
+# :BUG: can not build Fedora40 iso installer
 # https://github.com/osbuild/bootc-image-builder/issues/421
 # FIXED upstream https://github.com/osbuild/images/pull/696
-
+FROM quay.io/fedora/fedora-bootc:40
 RUN dnf -y install \
     cloud-init \
-    mc \
     qemu-guest-agent \
     vim \
   && dnf clean all \
   && ln -s ../cloud-init.target /usr/lib/systemd/system/default.target.wants \
   && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm} \
   && systemctl enable qemu-guest-agent \
-  && systemctl disable rpcbind.socket \
-  && systemctl disable rpcbind.service \
   && systemctl enable bootc-fetch-apply-updates.timer
-COPY wheel-nopasswd /etc/sudoers.d
