@@ -1,23 +1,9 @@
-FROM quay.io/centos-bootc/centos-bootc:stream9
-#FROM quay.io/fedora/fedora-bootc:40
-# https://github.com/osbuild/bootc-image-builder/issues/421
-# FIXED upstream https://github.com/osbuild/images/pull/696
-
+FROM docker.io/aussielunix/base:latest
 RUN dnf -y install 'dnf-command(copr)' \
   && dnf -y copr enable @caddy/caddy \
   && dnf -y install \
     caddy \
-    cloud-init \
-    mc \
-    qemu-guest-agent \
-    vim \
   && dnf clean all \
-  && ln -s ../cloud-init.target /usr/lib/systemd/system/default.target.wants \
   && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm} \
-  && systemctl enable caddy \
-  && systemctl enable qemu-guest-agent \
-  && systemctl disable rpcbind.socket \
-  && systemctl disable rpcbind.service \
-  && systemctl enable bootc-fetch-apply-updates.timer
-COPY wheel-nopasswd /etc/sudoers.d
+  && systemctl enable caddy
 COPY website/ /usr/share/caddy/
