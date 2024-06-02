@@ -12,6 +12,8 @@ Ideas I am interested in:
 * easy Roll backs
 * supply chain security
 * Can I get a bootc equipped LiveCD, boot any new baremetal/VM and the use `bootc` to switch the system over to it's purpose built bootable container and install to local disk ?
+  * boot [Fedora CoreOS Live ISO](https://docs.fedoraproject.org/en-US/fedora-coreos/live-booting/) and run
+  `podman run --rm --privileged --pid=host -v /var/lib/containers:/var/lib/containers --security-opt label=type:unconfined_t docker.io/aussielunix/bootc-caddy:latest bootc install to-disk /dev/vda`
 
 ## Demo 1
 
@@ -54,6 +56,25 @@ sudo dd status=progress if=output/bootiso/install.iso of=/dev/sda
 * reboot
 * test
 
+## Demo 6 - Proxmox VM Template
+
+```bash
+lunix@astro]  (main) -> just -l
+Available recipes:
+    build image
+    build-qcow2 image
+    create_template id name description image_name image_ver
+    upload_image name version
+```
+* build new base OCI artifact
+  `just build base`
+* build new base qcow2 image
+  `just build-qcow2 base`
+* upload base qcow2 image to Proxmox host
+  `just upload_image base 0.1`
+* create new VM template
+  `just create_template 7000 base-01 "Built by bootc" base 0.1`
+
 ## Links
 
 **SERVERS**
@@ -69,6 +90,7 @@ sudo dd status=progress if=output/bootiso/install.iso of=/dev/sda
 * https://centos.github.io/centos-bootc/usage/
 * https://github.com/containers/podman-bootc
 * https://gitlab.com/fedora/bootc/examples/-/tree/main?ref_type=heads
+* https://github.com/UntouchedWagons/Ubuntu-CloudInit-Docs/blob/main/samples/ubuntu/ubuntu-noble-cloudinit.sh
 
 **WORKSTATIONS**
 
