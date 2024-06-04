@@ -1,43 +1,32 @@
-# bootc
+# Bootable Containers - bootc
 
-Experimenting with bootc for managing my Linux fleet with a cloud native workflow.
+Redhat have introduced, as a preview, using image mode for RHEL to build,
+deploy, and manage operating systems. This "image mode" is based on bootable containers.
+
+* https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/using_image_mode_for_rhel_to_build_deploy_and_manage_operating_systems/managing-rhel-bootable-images_using-image-mode-for-rhel-to-build-deploy-and-manage-operating-systems#switching-the-container-image-reference_managing-rhel-bootable-images
+
+This repo is my notes whilst experimenting with bootc for managing my Linux fleet with a cloud native workflow.
 
 Ideas I am interested in:
 
 * Can I use a Containerfile (Dockerfile) as the source of truth for all image types - containers, local VMs, bare metal, AWS ami's etc ?
-* No more Packer ?
+* Does this mean no more Packer ?
 * cloud native development workflow and tooling for managing a fleet of Linux machines (bare metal, VMs or containers)
 * Air gapped updates
 * Over the air updates
 * easy Roll backs
-* supply chain security
-* Can I get a bootc equipped LiveCD, boot any new baremetal/VM and the use `bootc` to switch the system over to it's purpose built bootable container and install to local disk ?
-  * boot [Fedora CoreOS Live ISO](https://docs.fedoraproject.org/en-US/fedora-coreos/live-booting/) and run
-  `podman run --rm --privileged --pid=host -v /var/lib/containers:/var/lib/containers --security-opt label=type:unconfined_t docker.io/aussielunix/bootc-caddy:latest bootc install to-disk /dev/vda`
+* supply chain security for bare meta, VMs and containers
 
-## Demo
+## Docs
 
-* bake updated workload container
-* ssh to host and initiate update
-* reboot
-* test update workload - curl / browse to website
-
-## Demo
-
-* air gapped bare metal install
-* air gapped bare metal upgrade
-* test
-
-## Demo
-
-* create ami
-* create ec2 instance from base image
+I am collecting a bunch of notes in the [docs](docs/) directory.
 
 ## Links
 
+Links collected during research and experimentation.
+
 **SERVERS**
 
-* https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/using_image_mode_for_rhel_to_build_deploy_and_manage_operating_systems/managing-rhel-bootable-images_using-image-mode-for-rhel-to-build-deploy-and-manage-operating-systems#switching-the-container-image-reference_managing-rhel-bootable-images
 * https://osbuild.org/docs/bootc/
 * https://github.com/containers/bootc
 * https://docs.fedoraproject.org/en-US/bootc/auto-updates/
