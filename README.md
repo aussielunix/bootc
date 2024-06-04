@@ -25,7 +25,7 @@ I am collecting a bunch of notes in the [docs](docs/) directory.
 
 Links collected during research and experimentation.
 
-**SERVERS**
+SERVERS:
 
 * https://osbuild.org/docs/bootc/
 * https://github.com/containers/bootc
@@ -39,7 +39,7 @@ Links collected during research and experimentation.
 * https://gitlab.com/fedora/bootc/examples/-/tree/main?ref_type=heads
 * https://github.com/UntouchedWagons/Ubuntu-CloudInit-Docs/blob/main/samples/ubuntu/ubuntu-noble-cloudinit.sh
 
-**WORKSTATIONS**
+WORKSTATIONS:
 
 * [Roadmap for Fedora 41](https://gitlab.com/fedora/bootc/tracker/-/issues/11)
 * [Roadmap to Fedora Bootable Containers](https://gitlab.com/fedora/ostree/sig/-/issues/26)
