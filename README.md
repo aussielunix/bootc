@@ -15,65 +15,23 @@ Ideas I am interested in:
   * boot [Fedora CoreOS Live ISO](https://docs.fedoraproject.org/en-US/fedora-coreos/live-booting/) and run
   `podman run --rm --privileged --pid=host -v /var/lib/containers:/var/lib/containers --security-opt label=type:unconfined_t docker.io/aussielunix/bootc-caddy:latest bootc install to-disk /dev/vda`
 
-## Demo 1
-
-* Create bootable media from `docker.io/aussielunix/bootc-base:latest`
-```bash
-sudo podman run --rm -it --privileged --pull=newer  --security-opt label=type:unconfined_t -v $(pwd)/output:/output -v /var/lib/containers/storage:/var/lib/containers/storage quay.io/centos-bootc/bootc-image-builder:latest --rootfs ext4 --type iso --target-arch amd64 docker.io/aussielunix/bootc-base:latest
-sudo dd status=progress if=output/bootiso/install.iso of=/dev/sda
-```
-* Boot metal or VM  
-  Note: This is cloud-init enabled so be sure to create a username etc but refrain from adding workloads via cloud-init
-* ssh to host and switch to track new workload container image - Caddy and a basic website
-  ```bash
-  sudo bootc switch docker.io/aussielunix/bootc-caddy:latest
-  sudo systemctl reboot
-  ```
-* test new workload - curl / browse to website
-
-## Demo 2
+## Demo
 
 * bake updated workload container
 * ssh to host and initiate update
 * reboot
 * test update workload - curl / browse to website
 
-## Demo 3
+## Demo
 
 * air gapped bare metal install
 * air gapped bare metal upgrade
 * test
 
-## Demo 4
-
-* supply chain security
-
-## Demo 5
+## Demo
 
 * create ami
 * create ec2 instance from base image
-* ssh in and switch to workload container image
-* reboot
-* test
-
-## Demo 6 - Proxmox VM Template
-
-```bash
-lunix@astro]  (main) -> just -l
-Available recipes:
-    build image
-    build-qcow2 image
-    create_template id name description image_name image_ver
-    upload_image name version
-```
-* build new base OCI artifact  
-  `just build base`
-* build new base qcow2 image  
-  `just build-qcow2 base`
-* upload base qcow2 image to Proxmox host  
-  `just upload_image base 0.1`
-* create new VM template  
-  `just create_template 7000 base-01 "Built by bootc" base 0.1`
 
 ## Links
 
@@ -94,6 +52,8 @@ Available recipes:
 
 **WORKSTATIONS**
 
+* [Roadmap for Fedora 41](https://gitlab.com/fedora/bootc/tracker/-/issues/11)
+* [Roadmap to Fedora Bootable Containers](https://gitlab.com/fedora/ostree/sig/-/issues/26)
 * [Issue](https://gitlab.com/Siosm/bootc-base-images-experimental/-/tree/fedora-kinoite) tracking the overal readiness of bootc for Atomic Desktops
 * https://github.com/rsturla/fedora-bootc-base
 * https://github.com/ublue-os/main-bootc
