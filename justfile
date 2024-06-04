@@ -19,6 +19,23 @@ build-qcow2 image:
     --target-arch amd64 \
     --local docker.io/aussielunix/{{image}}:latest
 
+build-iso image:
+  mkdir -p .osbuild/{{image}}/output
+  sudo podman run \
+    --rm \
+    -it \
+    --privileged \
+    --pull=newer \
+    --security-opt label=type:unconfined_t \
+    -v $(pwd)/.osbuild/{{image}}/output:/output \
+    -v /var/lib/containers/storage:/var/lib/containers/storage \
+    -v $(pwd)/config.toml:/config.toml \
+    quay.io/centos-bootc/bootc-image-builder:latest \
+    --rootfs ext4 \
+    --type iso \
+    --target-arch amd64 \
+    --local docker.io/aussielunix/{{image}}:latest
+
 upload_image name version:
   scp .osbuild/{{name}}/output/qcow2/disk.qcow2 root@lab-01:/var/lib/vz/template/{{name}}-{{version}}.qcow2
 
