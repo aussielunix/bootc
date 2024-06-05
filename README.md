@@ -27,6 +27,7 @@ Links collected during research and experimentation.
 
 SERVERS:
 
+* Watch [First Look at Image Mode for RHEL](https://www.youtube.com/watch?v=QZDaTHyl1Sk)
 * https://osbuild.org/docs/bootc/
 * https://github.com/containers/bootc
 * https://docs.fedoraproject.org/en-US/bootc/auto-updates/
