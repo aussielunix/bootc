@@ -1,7 +1,7 @@
 # Bootable Containers - bootc
 
 Redhat have introduced, as a preview, using image mode for RHEL to build,
-deploy, and manage operating systems. This "image mode" is based on bootable containers.
+deploy, and manage operating systems. This "image mode" is based on [bootable containers](https://containers.github.io/bootable/).
 
 * https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/using_image_mode_for_rhel_to_build_deploy_and_manage_operating_systems/managing-rhel-bootable-images_using-image-mode-for-rhel-to-build-deploy-and-manage-operating-systems#switching-the-container-image-reference_managing-rhel-bootable-images
 
@@ -15,7 +15,7 @@ Ideas I am interested in:
 * Air gapped updates
 * Over the air updates
 * easy Roll backs
-* supply chain security for bare meta, VMs and containers
+* supply chain security for bare metal, VMs and containers
 
 ## Docs
 
