@@ -1,10 +1,12 @@
+# build new OCI image locally
 build image:
   sudo podman build -t docker.io/aussielunix/{{image}}:latest \
     -f ./{{image}}/Containerfile \
     ./{{image}}
 
+# build new qcow2 image from local OCI image
 build-qcow2 image:
-  mkdir -p .osbuild/{{image}}/output
+  mkdir -p .osbuild/{{image}}
   sudo podman run \
     --rm \
     -it \
@@ -12,22 +14,23 @@ build-qcow2 image:
     --pull=newer \
     --platform linux/amd64 \
     --security-opt label=type:unconfined_t \
-    -v $(pwd)/.osbuild/{{image}}/output:/output \
+    -v $(pwd)/.osbuild/{{image}}:/output \
     -v /var/lib/containers/storage:/var/lib/containers/storage \
     quay.io/centos-bootc/bootc-image-builder:latest \
     --type qcow2 --rootfs ext4 \
     --target-arch amd64 \
     --local docker.io/aussielunix/{{image}}:latest
 
+#  build iso installer from local OCI image
 build-iso image:
-  mkdir -p .osbuild/{{image}}/output
+  mkdir -p .osbuild/{{image}}
   sudo podman run \
     --rm \
     -it \
     --privileged \
     --pull=newer \
     --security-opt label=type:unconfined_t \
-    -v $(pwd)/.osbuild/{{image}}/output:/output \
+    -v $(pwd)/.osbuild/{{image}}:/output \
     -v /var/lib/containers/storage:/var/lib/containers/storage \
     -v $(pwd)/config.toml:/config.toml \
     quay.io/centos-bootc/bootc-image-builder:latest \
@@ -36,9 +39,11 @@ build-iso image:
     --target-arch amd64 \
     --local docker.io/aussielunix/{{image}}:latest
 
+# upload qcow2 disk image to homelab node
 hl_upload_image name version:
   scp .osbuild/{{name}}/output/qcow2/disk.qcow2 root@lab-01:/var/lib/vz/template/{{name}}-{{version}}.qcow2
 
+# create new VM template in homelab (proxmox)
 hl_create_template id name description image_name image_ver:
   #!/usr/bin/env bash
   set -euo pipefail
@@ -83,6 +88,7 @@ hl_create_template id name description image_name image_ver:
     qm template {{id}}
   ENDSSH
 
+# create new libvirt template locally
 lo_create_template name image_name image_ver:
   #!/usr/bin/env bash
   set -euo pipefail
@@ -93,6 +99,7 @@ lo_create_template name image_name image_ver:
   echo "{{name}}-{{image_ver}} from file {{image_name}} is ${IMGSIZE} bytes and is of type ${IMGFMT}"
   virsh vol-list --pool default | grep {{name}}
 
+# create new VM locally
 lo_newvm name template:
   #!/usr/bin/env bash
   set -euo pipefail
@@ -111,6 +118,7 @@ lo_newvm name template:
   #create vm
   virt-install --cpu host-passthrough --name {{name}} --vcpus 2 --memory 4096 --disk vol=default/{{name}}.seed.iso,device=cdrom --disk vol=default/{{name}},device=disk,size=20,bus=virtio,sparse=false --os-variant fedora40 --virt-type kvm --graphics spice --network network=default,model=virtio --autoconsole text --import
 
+# delete local VM
 lo_delvm name:
   #!/usr/bin/env bash
   set -euo pipefail
