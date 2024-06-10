@@ -19,7 +19,10 @@ Ideas I am interested in:
 
 ## Docs
 
-I am collecting a bunch of notes in the [docs](docs/) directory.
+I am collecting a bunch of notes in the [docs](docs/) directory.  
+There is a collection of tasks being [collected](justfile/) using [Just](https://just.systems/).  
+Just is a task runner similar to make, but designed to run project-specific commands, it is not a build system.  
+[Intro](https://universal-blue.discourse.group/t/introduction-to-just/42) to Just if you need some more info.
 
 ## Links
 
