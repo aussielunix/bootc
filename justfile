@@ -36,10 +36,10 @@ build-iso image:
     --target-arch amd64 \
     --local docker.io/aussielunix/{{image}}:latest
 
-upload_image name version:
+hl_upload_image name version:
   scp .osbuild/{{name}}/output/qcow2/disk.qcow2 root@lab-01:/var/lib/vz/template/{{name}}-{{version}}.qcow2
 
-create_template id name description image_name image_ver:
+hl_create_template id name description image_name image_ver:
   #!/usr/bin/env bash
   set -euo pipefail
   ssh -q root@lab-01 <<'ENDSSH'
@@ -82,3 +82,39 @@ create_template id name description image_name image_ver:
     qm set {{id}} --virtio0 vmstore:vm-{{id}}-disk-0
     qm template {{id}}
   ENDSSH
+
+lo_create_template name image_name image_ver:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  IMGSIZE=$(qemu-img info --output json {{image_name}} | jq -r .[\"virtual-size\"])
+  IMGFMT=$(qemu-img info --output json {{image_name}} | jq -r .format)
+  virsh vol-create-as --pool default {{name}}-{{image_ver}} ${IMGSIZE} --format ${IMGFMT}
+  virsh vol-upload --pool default --vol {{name}}-{{image_ver}} {{image_name}}
+  echo "{{name}}-{{image_ver}} from file {{image_name}} is ${IMGSIZE} bytes and is of type ${IMGFMT}"
+  virsh vol-list --pool default | grep {{name}}
+
+lo_newvm name template:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  #clone template disk
+  virsh vol-clone --pool default --vol {{template}} --newname {{name}}
+  #create ci-iso
+  cat ci.tmpl | sed "s/VMNAME/{{name}}/g" > /tmp/$$.ci
+  echo "instance-id: $(uuidgen || echo i-abcdefg)" > /tmp/$$.metadata
+  cloud-localds {{name}}.seed.iso /tmp/$$.ci /tmp/$$.metadata
+  IMGSIZE=$(qemu-img info --output json {{name}}.seed.iso | jq -r .[\"virtual-size\"])
+  IMGFMT=$(qemu-img info --output json {{name}}.seed.iso | jq -r .format)
+  virsh vol-create-as default {{name}}.seed.iso ${IMGSIZE} --format ${IMGFMT}
+  virsh vol-upload --pool default ${NEW_VM}.seed.iso ${NEW_VM}.seed.iso
+  #cleanup temp files
+  rm /tmp/$$.ci /tmp/$$.metadata {{name}}.seed.iso
+  #create vm
+  virt-install --cpu host-passthrough --name {{name}} --vcpus 2 --memory 4096 --disk vol=default/{{name}}.seed.iso,device=cdrom --disk vol=default/{{name}},device=disk,size=20,bus=virtio,sparse=false --os-variant fedora40 --virt-type kvm --graphics spice --network network=default,model=virtio --autoconsole text --import
+
+lo_delvm name:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  virsh destroy --domain  {{name}}
+  virsh undefine --domain {{name}}
+  virsh vol-delete --pool default --vol {{name}}
+  virsh vol-delete --pool default --vol {{name}}.seed.iso

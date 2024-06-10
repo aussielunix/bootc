@@ -1,0 +1,36 @@
+#cloud-config
+hostname: VMNAME
+fqdn: VMNAME.hl.valueline.io
+manage_etc_hosts: true
+users:
+  - name: lunix
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: wheel
+    shell: /bin/bash
+    lock_passwd: false
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDGf4Ng0LmFowuQZaGkTr2PmJZspi/JdVs7J9INsjPZ3vCuWEBcBhrFkSj/T+RAgS/NykaNQPzhpDkPD5Cypamxip4tueVtxR2WGhQZn6Qqiwbq5yIKB9tOF+JEgyReEixR0duEv0hEy+auUOkvVjKXv01nY/67XhiIqzh5jHVnoqY7KoNxiEVVa+YvSas6iGUyMO3QSS8hyQSRRb8WFQrqajnfW2J6MroTTM/BX6bqg0imgCHLsSLzI0Hfj4yHse+2A9GNZDEH3pMBAK3VWiuqO684bsTS40/r7BkY52QveBsst+rP9x5krlgol3beVzJDVf4aJJBwklfozrdOxpxmtm1vGKQMMLDCcT6/VhuyhkR8Qdjt7iaKe25Vq5GWIttaw6tVt44x0N+vgAjB53lyiPbA5BOxLGDajuux/JHaI1JkVvYEc3+RUi0ppfS95H85SlsTKTSLFl67RJHoNEb5YCRLuG91EvYusgfy+W3/AclimDbyqYSgNyxPj3dgJiN7U8m3iVMS+6Ff3Ow8qhcCyERZbOMrMLklOgoL1H3FnCXoSSLYtPHMIbRKR1B9LHro0PTCpqoQ5VaIw4b4vpcbCdWUVrlscdLg9VezQGvxNyqMId+CO8g92q6V/fmhFqxgLYMXmcu/kX5Q/gUky1lfROyc2xAVqwrXBWmi3iQ5ZQ== Mick Pollard <aussielunix@gmail.com>
+
+# only cert auth via ssh (console access can still login)
+ssh_pwauth: true
+
+# Run apt or yum upgrade
+package_upgrade: false
+
+growpart:
+  mode: auto
+  devices: ['/']
+
+# reboot so grub config takes affect
+power_state:
+  delay: 30
+  mode: reboot
+  message: ci-Rebooting
+
+# written to /var/log/cloud-init-output.log
+final_message: |
+  cloud-init has finished
+  version: $version
+  timestamp: $timestamp
+  datasource: $datasource
+  uptime: $uptime
