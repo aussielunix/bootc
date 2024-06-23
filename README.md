@@ -45,6 +45,7 @@ SERVERS:
 
 WORKSTATIONS:
 
+* [HeliumOS](https://codeberg.org/HeliumOS/bootc) - proper bootc based desktop OS based on CentOS !
 * [Roadmap for Fedora 41](https://gitlab.com/fedora/bootc/tracker/-/issues/11)
 * [Roadmap to Fedora Bootable Containers](https://gitlab.com/fedora/ostree/sig/-/issues/26)
 * [Issue](https://gitlab.com/Siosm/bootc-base-images-experimental/-/tree/fedora-kinoite) tracking the overal readiness of bootc for Atomic Desktops
