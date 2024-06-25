@@ -88,6 +88,21 @@ hl_create_template id name description image_name image_ver:
     qm template {{id}}
   ENDSSH
 
+# create new VM in homelab (proxmox)
+# source id - destination id - destination name - description - destination pool - destination IP (last quad)
+hl_create_vm sid did dname description dpool dip:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  cat ci.tmpl | sed "s/VMNAME/{{dname}}/g" > /tmp/$$.ci
+  scp /tmp/$$.ci root@lab-01:/var/lib/vz/snippets/vm-{{did}}-user-data.yaml
+  ssh -q root@lab-01 'qm clone {{sid}} {{did}} --description "{{description}}" --full 1 --name {{dname}} --pool {{dpool}} --target lab-01 --storage vmstore'
+  AMAC=$(ssh -q root@lab-01 "pvesh get nodes/lab-01/qemu/{{did}}/config --output-format json | jq .net0 | grep -oE '([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})'")
+  cat net.tmpl | sed "s/NEWMAC/$AMAC/g" | sed "s/NEWIP/{{dip}}/g" > /tmp/$$.net
+  scp /tmp/$$.net root@lab-01:/var/lib/vz/snippets/vm-{{did}}-network.yaml
+  rm /tmp/$$.ci /tmp/$$.net
+  ssh -q root@lab-01 'qm set {{did}} --onboot 1 --cicustom "user=local:snippets/vm-{{did}}-user-data.yaml,network=local:snippets/vm-{{did}}-network.yaml" --memory 4096 --sockets 2'
+  #qm start {{did}}
+
 # create new libvirt template locally
 lo_create_template name image_name image_ver:
   #!/usr/bin/env bash
@@ -112,7 +127,7 @@ lo_newvm name template:
   IMGSIZE=$(qemu-img info --output json {{name}}.seed.iso | jq -r .[\"virtual-size\"])
   IMGFMT=$(qemu-img info --output json {{name}}.seed.iso | jq -r .format)
   virsh vol-create-as default {{name}}.seed.iso ${IMGSIZE} --format ${IMGFMT}
-  virsh vol-upload --pool default ${NEW_VM}.seed.iso ${NEW_VM}.seed.iso
+  virsh vol-upload --pool default {{name}}.seed.iso {{name}}.seed.iso
   #cleanup temp files
   rm /tmp/$$.ci /tmp/$$.metadata {{name}}.seed.iso
   #create vm
