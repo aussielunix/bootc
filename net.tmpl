@@ -1,0 +1,17 @@
+---
+
+version: 1
+config:
+  - type: physical
+    name: eth0
+    mac_address: 'NEWMAC'
+    subnets:
+      - type: static
+        address: '10.0.20.NEWIP'
+        netmask: '255.255.255.0'
+        gateway: '10.0.20.1'
+  - type: nameserver
+    address:
+      - '10.0.99.11'
+    search:
+      - 'hl.valueline.io'
