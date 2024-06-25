@@ -25,7 +25,7 @@ sudo podman run -p 80:80 --rm -ti aussielunix/bootc-caddy:latest bash
 # publish
 sudo podman push aussielunix/bootc-caddy:latest
 
-# ssh to vm/metall
+# ssh to vm/metal
 ssh ubuntu@10.0.0.1
 
 # mark current OCI image as rollback, update OCI container, stage it & reboot VM/host into it
