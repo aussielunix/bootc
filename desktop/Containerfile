@@ -1,86 +1,31 @@
+# :BUG: can not build Fedora40 iso installer
+# https://github.com/osbuild/bootc-image-builder/issues/421
+# FIXED upstream https://github.com/osbuild/images/pull/696
 FROM quay.io/fedora/fedora-bootc:40
-
-RUN dnf install -y \
-  adobe-source-code-pro-fonts \
-  avahi \
-  dconf \
-  desktop-backgrounds-gnome \
-  flatpak \
-  flatseal \
-  fprintd-pam \
-  gdm \
-  git \
-  glib-networking \
-  glx-utils \
-  gnome-backgrounds \
-  gnome-bluetooth \
-  gnome-browser-connector \
-  gnome-classic-session \
-  gnome-classic-session-xsession \
-  gnome-color-manager \
-  gnome-control-center \
-  gnome-disk-utility \
-  gnome-initial-setup \
-  gnome-remote-desktop \
-  gnome-session-wayland-session \
-  gnome-session-xsession \
-  gnome-settings-daemon \
-  gnome-shell \
-  gnome-software \
-  gnome-software-rpm-ostree \
-  gnome-system-monitor \
-  gnome-terminal \
-  gnome-terminal-nautilus \
-  gnome-user-docs \
-  gnome-user-share \
-  gvfs-afc \
-  gvfs-afp \
-  gvfs-archive \
-  gvfs-fuse \
-  gvfs-goa \
-  gvfs-gphoto2 \
-  gvfs-mtp \
-  gvfs-smb \
-  librsvg2 \
-  libsane-hpaio \
-  mesa-dri-drivers \
-  mesa-libEGL \
-  mesa-vulkan-drivers \
-  nautilus \
-  NetworkManager-adsl \
-  NetworkManager-openconnect-gnome \
-  NetworkManager-openvpn-gnome \
-  NetworkManager-ppp \
-  NetworkManager-pptp-gnome \
-  NetworkManager-ssh-gnome \
-  NetworkManager-vpnc-gnome \
-  NetworkManager-wwan \
-  plymouth-system-theme \
-  polkit \
-  rygel \
-  systemd-oomd-defaults \
-  terminator \
-  xdg-desktop-portal \
-  xdg-desktop-portal-gnome \
-  xdg-desktop-portal-gtk \
-  xdg-user-dirs-gtk \
-  xorg-x11-drv-amdgpu \
-  xorg-x11-drv-ati \
-  xorg-x11-drv-evdev \
-  xorg-x11-drv-fbdev \
-  xorg-x11-drv-libinput \
-  xorg-x11-drv-nouveau \
-  xorg-x11-drv-qxl \
-  xorg-x11-drv-wacom \
-  xorg-x11-server-Xorg \
-  xorg-x11-server-Xwayland \
-  xorg-x11-xauth \
-  xorg-x11-xinit \
-  @fonts \
-  @GNOME \
-  @hardware-support \
-  @headless-management \
-  @multimedia
-
-COPY ./*.service /usr/lib/systemd/system/
-RUN sed -i 's,ExecStart=/usr/bin/bootc update --apply --quiet,ExecStart=/usr/bin/bootc update --quiet,g' /usr/lib/systemd/system/bootc-fetch-apply-updates.service
+RUN dnf install -y --nobest \
+    --excludepkgs rootfiles,firefox,gnome-tour \
+    '@Fedora Workstation' \
+    'flatpak' \
+    'flatpak-spawn' \
+    'flatseal' \
+    'terminator' \
+    'distrobox' \
+    'gnome-extensions-app' \
+    'gnome-shell-extension-appindicator' \
+    'gnome-tweaks' \
+    'strace' \
+    'wl-clipboard' \
+    'wireguard-tools' \
+    'vim-enhanced' \
+  && dnf remove -y \
+    'passim' \
+    'tracker' \
+    'tracker-miners' \
+  && dnf clean all \
+  && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm} \
+  && flatpak remote-add --system --if-not-exists --subset=verified flathub-verified https://flathub.org/repo/flathub.flatpakrepo \
+  && systemctl enable qemu-guest-agent \
+  && systemctl enable bootc-fetch-apply-updates.timer \
+  && systemctl disable ModemManager.service \
+  && systemctl disable cups.service
+COPY system_files /
