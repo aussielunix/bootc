@@ -2,7 +2,10 @@
 # https://github.com/osbuild/bootc-image-builder/issues/421
 # FIXED upstream https://github.com/osbuild/images/pull/696
 FROM quay.io/fedora/fedora-bootc:40
-RUN dnf install -y --nobest \
+RUN mkdir -p \
+  /var/log/audit \
+  /var/lib/alternatives \
+  && dnf install -y --nobest \
     --excludepkgs rootfiles,firefox,gnome-tour \
     '@Fedora Workstation' \
     'flatpak' \
